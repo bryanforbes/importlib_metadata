@@ -11,7 +11,7 @@ import operator
 import functools
 import itertools
 import posixpath
-import collections
+import collections.abc
 
 from ._compat import (
     install,
@@ -178,6 +178,13 @@ class FileHash:
         return '<FileHash mode: {} value: {}>'.format(self.mode, self.value)
 
 
+class PackageMetadata(collections.abc.Mapping):
+    def get_all(self, key):
+        """
+        Return all values associated with a possibly multi-valued key.
+        """
+
+
 class Distribution:
     """A Python distribution package."""
 
@@ -263,7 +270,7 @@ class Distribution:
         return PathDistribution(zipp.Path(meta.build_as_zip(builder)))
 
     @property
-    def metadata(self):
+    def metadata(self) -> PackageMetadata:
         """Return the parsed metadata for this Distribution.
 
         The returned object will have keys that name the various bits of
