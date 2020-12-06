@@ -131,6 +131,10 @@ class EntryPoint(
     def _from_text_for(cls, text, dist):
         return (ep._for(dist) for ep in cls._from_text(text))
 
+    @classmethod
+    def _new_for(cls, name, value, group, dist):
+        return cls(name, value, group)._for(dist)
+
     def _for(self, dist):
         self.dist = dist
         return self
@@ -143,8 +147,8 @@ class EntryPoint(
 
     def __reduce__(self):
         return (
-            self.__class__,
-            (self.name, self.value, self.group),
+            EntryPoint._new_for,
+            (self.name, self.value, self.group, self.dist),
         )
 
 
